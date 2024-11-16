@@ -19,6 +19,7 @@ const ChatInterface = () => {
   ]);
   const [input, setInput] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const [isVoiceOutputEnabled, setIsVoiceOutputEnabled] = useState(true);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -48,8 +49,10 @@ const ChatInterface = () => {
       };
       setMessages(prev => [...prev, assistantMessage]);
       
-      // Speak the assistant's response
-      speak(assistantMessage.content);
+      // Only speak if voice output is enabled
+      if (isVoiceOutputEnabled) {
+        speak(assistantMessage.content);
+      }
     } catch (error) {
       console.error("Error:", error);
       toast({
@@ -71,6 +74,7 @@ const ChatInterface = () => {
         isLoading={isLoading}
         onInputChange={setInput}
         onSubmit={handleSubmit}
+        onVoiceOutputToggle={setIsVoiceOutputEnabled}
       />
     </Card>
   );
