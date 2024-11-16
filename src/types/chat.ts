@@ -4,6 +4,11 @@ export interface Message {
   timestamp?: Date;
   priority?: "high" | "medium" | "low";
   type?: "incident" | "recommendation" | "alert";
+  attachment?: {
+    name: string;
+    url: string;
+    type: string;
+  };
   metadata?: {
     location?: string;
     incidentType?: string;

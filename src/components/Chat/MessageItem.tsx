@@ -1,5 +1,5 @@
 import { Badge } from "@/components/ui/badge";
-import { Clock, ThumbsUp, ThumbsDown } from "lucide-react";
+import { Clock, ThumbsUp, ThumbsDown, Paperclip } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Message } from "@/types/chat";
 
@@ -48,6 +48,26 @@ const MessageItem = ({ message, onFeedback }: MessageItemProps) => {
           </Badge>
         )}
         <div className="mb-2">{message.content}</div>
+        {message.attachment && (
+          <div className="mt-2 mb-2">
+            {message.attachment.type.startsWith('image/') ? (
+              <img 
+                src={message.attachment.url} 
+                alt={message.attachment.name}
+                className="max-w-full rounded-lg"
+              />
+            ) : (
+              <a 
+                href={message.attachment.url}
+                download={message.attachment.name}
+                className="flex items-center gap-2 text-blue-500 hover:text-blue-600"
+              >
+                <Paperclip className="h-4 w-4" />
+                {message.attachment.name}
+              </a>
+            )}
+          </div>
+        )}
         {message.metadata?.suggestedActions && (
           <div className="mt-2 space-y-1">
             <div className="text-sm font-semibold">Suggested Actions:</div>

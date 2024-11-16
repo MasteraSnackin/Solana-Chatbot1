@@ -21,15 +21,38 @@ const ChatInterface = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [isVoiceOutputEnabled, setIsVoiceOutputEnabled] = useState(true);
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent, attachment?: File) => {
     e.preventDefault();
-    if (!input.trim()) return;
+    if (!input.trim() && !attachment) return;
+
+    let attachmentData;
+    if (attachment) {
+      try {
+        const reader = new FileReader();
+        attachmentData = await new Promise((resolve) => {
+          reader.onload = (e) => resolve({
+            name: attachment.name,
+            url: e.target?.result as string,
+            type: attachment.type
+          });
+          reader.readAsDataURL(attachment);
+        });
+      } catch (error) {
+        toast({
+          variant: "destructive",
+          title: "Error",
+          description: "Failed to process attachment",
+        });
+        return;
+      }
+    }
 
     const userMessage: Message = {
       role: "user",
       content: input,
       timestamp: new Date(),
-      type: "incident"
+      type: "incident",
+      attachment: attachmentData
     };
     setMessages(prev => [...prev, userMessage]);
     setInput("");
@@ -49,7 +72,6 @@ const ChatInterface = () => {
       };
       setMessages(prev => [...prev, assistantMessage]);
       
-      // Only speak if voice output is enabled
       if (isVoiceOutputEnabled) {
         speak(assistantMessage.content);
       }
