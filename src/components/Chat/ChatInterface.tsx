@@ -54,34 +54,40 @@ const ChatInterface = () => {
       type: "incident",
       attachment: attachmentData
     };
+
     setMessages(prev => [...prev, userMessage]);
     setInput("");
     setIsLoading(true);
 
     try {
-      const data = await sendMessage([...messages, userMessage]);
-      const assistantMessage: Message = {
-        role: "assistant",
-        content: data.choices[0].message.content,
-        timestamp: new Date(),
-        type: "recommendation",
-        priority: "medium",
-        metadata: {
-          suggestedActions: ["Dispatch emergency response", "Alert nearby units", "Request backup"]
-        }
-      };
-      setMessages(prev => [...prev, assistantMessage]);
+      const response = await sendMessage([...messages, userMessage]);
       
-      if (isVoiceOutputEnabled) {
-        speak(assistantMessage.content);
+      if (response.choices?.[0]?.message?.content) {
+        const assistantMessage: Message = {
+          role: "assistant",
+          content: response.choices[0].message.content,
+          timestamp: new Date(),
+          type: "recommendation",
+          priority: "medium",
+          metadata: {
+            suggestedActions: ["Dispatch emergency response", "Alert nearby units", "Request backup"]
+          }
+        };
+        
+        setMessages(prev => [...prev, assistantMessage]);
+        
+        if (isVoiceOutputEnabled) {
+          speak(assistantMessage.content);
+        }
+
+        toast({
+          title: "Response received",
+          description: "New message from EROS system",
+        });
       }
     } catch (error) {
-      console.error("Error:", error);
-      toast({
-        variant: "destructive",
-        title: "Error",
-        description: "Failed to get response from emergency system",
-      });
+      // Error handling is now done in the sendMessage function
+      console.error("Failed to process message:", error);
     } finally {
       setIsLoading(false);
     }
