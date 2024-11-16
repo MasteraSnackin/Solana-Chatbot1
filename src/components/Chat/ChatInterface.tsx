@@ -7,6 +7,7 @@ import MessageInput from "./MessageInput";
 import { Message } from "@/types/chat";
 import { sendMessage } from "@/services/chat";
 import { speak } from "@/utils/voiceUtils";
+import { analyzeIncident } from "@/lib/api";
 
 const ChatInterface = () => {
   const [messages, setMessages] = useState<Message[]>([
@@ -49,7 +50,11 @@ const ChatInterface = () => {
       };
       setMessages(prev => [...prev, assistantMessage]);
       
-      // Only speak if voice output is enabled
+      // Analyze the conversation after each response
+      const lastMessages = [...messages, userMessage, assistantMessage].slice(-5);
+      const analysisText = lastMessages.map(m => m.content).join("\n");
+      await analyzeIncident(analysisText);
+      
       if (isVoiceOutputEnabled) {
         speak(assistantMessage.content);
       }
