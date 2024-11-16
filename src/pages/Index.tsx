@@ -2,6 +2,7 @@ import StatusBar from "@/components/Dashboard/StatusBar";
 import IncidentList from "@/components/Dashboard/IncidentList";
 import ResourceMap from "@/components/Dashboard/ResourceMap";
 import AIAnalysis from "@/components/Dashboard/AIAnalysis";
+import ChatInterface from "@/components/Chat/ChatInterface";
 
 const Index = () => {
   return (
@@ -18,12 +19,16 @@ const Index = () => {
 
       <StatusBar />
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
         <div className="space-y-6">
           <IncidentList />
           <AIAnalysis />
         </div>
         <ResourceMap />
+      </div>
+
+      <div className="mt-6">
+        <ChatInterface />
       </div>
     </div>
   );
