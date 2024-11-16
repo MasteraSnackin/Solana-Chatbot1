@@ -1,8 +1,10 @@
 import { OpenAI } from "openai";
 
+const NEBIUS_API_KEY = import.meta.env.VITE_NEBIUS_API_KEY || 'default_key_for_development';
+
 const client = new OpenAI({
   baseURL: "https://api.studio.nebius.ai/v1/",
-  apiKey: import.meta.env.VITE_NEBIUS_API_KEY,
+  apiKey: NEBIUS_API_KEY,
 });
 
 export interface IncidentAnalysis {
