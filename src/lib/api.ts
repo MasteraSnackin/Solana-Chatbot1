@@ -5,6 +5,7 @@ const NEBIUS_API_KEY = import.meta.env.VITE_NEBIUS_API_KEY || 'default_key_for_d
 const client = new OpenAI({
   baseURL: "https://api.studio.nebius.ai/v1/",
   apiKey: NEBIUS_API_KEY,
+  dangerouslyAllowBrowser: true
 });
 
 export interface IncidentAnalysis {
