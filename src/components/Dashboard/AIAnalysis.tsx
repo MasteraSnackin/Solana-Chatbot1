@@ -1,5 +1,5 @@
-import { Brain, AlertTriangle, MessageSquare } from "lucide-react";
-import { useState, useEffect } from "react";
+import { Brain, AlertTriangle } from "lucide-react";
+import { useState } from "react";
 import { analyzeIncident } from "@/lib/api";
 
 const AIAnalysis = () => {
@@ -8,11 +8,6 @@ const AIAnalysis = () => {
     priority: number;
     recommendation: string;
     requiredResources: string[];
-    conversationInsights?: {
-      sentiment: string;
-      urgency: string;
-      keyTopics: string[];
-    };
   } | null>(null);
 
   const handleAnalyze = async () => {
@@ -56,32 +51,10 @@ const AIAnalysis = () => {
             <AlertTriangle className={`w-5 h-5 ${analysis.priority === 1 ? 'text-emergency' : 'text-warning'}`} />
             <span className="text-foreground">Priority Level: {analysis.priority}</span>
           </div>
-          
-          {analysis.conversationInsights && (
-            <div className="bg-gray-800/50 p-4 rounded-lg mb-4">
-              <div className="flex items-center mb-2">
-                <MessageSquare className="w-4 h-4 mr-2 text-info" />
-                <h3 className="font-semibold text-foreground">Conversation Insights:</h3>
-              </div>
-              <div className="space-y-2 text-sm">
-                <p>Sentiment: {analysis.conversationInsights.sentiment}</p>
-                <p>Urgency Level: {analysis.conversationInsights.urgency}</p>
-                <div className="flex flex-wrap gap-2 mt-2">
-                  {analysis.conversationInsights.keyTopics.map((topic, index) => (
-                    <span key={index} className="px-2 py-1 bg-info/20 text-info rounded-full text-xs">
-                      {topic}
-                    </span>
-                  ))}
-                </div>
-              </div>
-            </div>
-          )}
-
           <div className="bg-gray-800 p-4 rounded-lg">
             <h3 className="font-semibold text-foreground mb-2">Recommendation:</h3>
             <p className="text-gray-300">{analysis.recommendation}</p>
           </div>
-          
           <div>
             <h3 className="font-semibold text-foreground mb-2">Required Resources:</h3>
             <div className="flex flex-wrap gap-2">
