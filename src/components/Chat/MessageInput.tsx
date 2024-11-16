@@ -1,6 +1,6 @@
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { Send, Mic, MicOff, Volume2, VolumeX } from "lucide-react";
+import { Send, Mic, Volume2, VolumeX } from "lucide-react";
 import { useState } from "react";
 import { startVoiceRecognition } from "@/utils/voiceUtils";
 import { toast } from "@/components/ui/use-toast";
@@ -24,19 +24,10 @@ const MessageInput = ({
   const [isVoiceOutputEnabled, setIsVoiceOutputEnabled] = useState(true);
   const [recognition, setRecognition] = useState<any>(null);
 
-  const handleVoiceInput = () => {
-    if (isListening) {
-      recognition?.stop();
-      setIsListening(false);
-      setRecognition(null);
-      return;
-    }
-
+  const startListening = () => {
     const newRecognition = startVoiceRecognition(
       (text) => {
         onInputChange(text);
-        setIsListening(false);
-        setRecognition(null);
         toast({
           title: "Voice captured",
           description: "Your message is ready to send.",
@@ -48,14 +39,20 @@ const MessageInput = ({
           title: "Voice Input Error",
           description: error,
         });
-        setIsListening(false);
-        setRecognition(null);
       }
     );
 
     if (newRecognition) {
       setIsListening(true);
       setRecognition(newRecognition);
+    }
+  };
+
+  const stopListening = () => {
+    if (recognition) {
+      recognition.stop();
+      setIsListening(false);
+      setRecognition(null);
     }
   };
 
@@ -82,15 +79,13 @@ const MessageInput = ({
         type="button"
         variant="outline"
         size="icon"
-        onClick={handleVoiceInput}
+        onMouseDown={startListening}
+        onMouseUp={stopListening}
+        onMouseLeave={stopListening}
         className={isListening ? "bg-red-100" : ""}
-        aria-label="Toggle voice input"
+        aria-label="Hold to speak"
       >
-        {isListening ? (
-          <MicOff className="h-4 w-4" />
-        ) : (
-          <Mic className="h-4 w-4" />
-        )}
+        <Mic className="h-4 w-4" />
       </Button>
       <Button
         type="button"
