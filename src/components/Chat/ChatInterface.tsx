@@ -25,13 +25,13 @@ const ChatInterface = () => {
     e.preventDefault();
     if (!input.trim()) return;
 
-    const userMessage = { role: "user", content: input };
+    const userMessage: Message = { role: "user", content: input };
     setMessages(prev => [...prev, userMessage]);
     setInput("");
     setIsLoading(true);
 
     try {
-      const response = await fetch("https://api.groq.com/v1/chat/completions", {
+      const response = await fetch("https://api.groq.com/openai/v1/chat/completions", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -44,8 +44,12 @@ const ChatInterface = () => {
         }),
       });
 
+      if (!response.ok) {
+        throw new Error(`API error: ${response.status}`);
+      }
+
       const data = await response.json();
-      const assistantMessage = {
+      const assistantMessage: Message = {
         role: "assistant",
         content: data.choices[0].message.content,
       };
