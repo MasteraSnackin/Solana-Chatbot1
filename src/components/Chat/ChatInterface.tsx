@@ -6,6 +6,7 @@ import MessageList from "./MessageList";
 import MessageInput from "./MessageInput";
 import { Message } from "@/types/chat";
 import { sendMessage } from "@/services/chat";
+import { speak } from "@/utils/voiceUtils";
 
 const ChatInterface = () => {
   const [messages, setMessages] = useState<Message[]>([
@@ -46,6 +47,9 @@ const ChatInterface = () => {
         }
       };
       setMessages(prev => [...prev, assistantMessage]);
+      
+      // Speak the assistant's response
+      speak(assistantMessage.content);
     } catch (error) {
       console.error("Error:", error);
       toast({
