@@ -1,13 +1,12 @@
 export interface Message {
-  role: "system" | "user" | "assistant";
+  role: "user" | "assistant" | "system";
   content: string;
-  timestamp?: Date;
+  timestamp: Date;
+  type: "incident" | "recommendation" | "alert";
   priority?: "high" | "medium" | "low";
-  type?: "incident" | "recommendation" | "alert";
   metadata?: {
-    location?: string;
-    incidentType?: string;
-    severity?: string;
     suggestedActions?: string[];
+    ipAddress?: string;
+    location?: string;
   };
 }

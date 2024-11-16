@@ -8,6 +8,7 @@ import { Message } from "@/types/chat";
 import { sendMessage } from "@/services/chat";
 import { speak } from "@/utils/voiceUtils";
 import { analyzeIncident } from "@/lib/api";
+import { getIPAddress } from "@/utils/ipUtils";
 
 const ChatInterface = () => {
   const [messages, setMessages] = useState<Message[]>([
@@ -32,6 +33,17 @@ const ChatInterface = () => {
       timestamp: new Date(),
       type: "incident"
     };
+
+    try {
+      const ipAddress = await getIPAddress();
+      userMessage.metadata = {
+        ...userMessage.metadata,
+        ipAddress
+      };
+    } catch (error) {
+      console.error('Failed to get IP address:', error);
+    }
+
     setMessages(prev => [...prev, userMessage]);
     setInput("");
     setIsLoading(true);
@@ -53,7 +65,7 @@ const ChatInterface = () => {
       // Analyze the conversation after each response
       const lastMessages = [...messages, userMessage, assistantMessage].slice(-5);
       const analysisText = lastMessages.map(m => m.content).join("\n");
-      await analyzeIncident(analysisText);
+      const analysis = await analyzeIncident(analysisText);
       
       if (isVoiceOutputEnabled) {
         speak(assistantMessage.content);
