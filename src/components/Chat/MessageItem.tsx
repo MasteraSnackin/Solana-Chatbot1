@@ -9,19 +9,6 @@ interface MessageItemProps {
 }
 
 const MessageItem = ({ message, onFeedback }: MessageItemProps) => {
-  const getPriorityColor = (priority?: string) => {
-    switch (priority) {
-      case "high":
-        return "bg-emergency text-white";
-      case "medium":
-        return "bg-warning text-white";
-      case "low":
-        return "bg-info text-white";
-      default:
-        return "bg-muted";
-    }
-  };
-
   return (
     <div
       className={`flex ${
@@ -40,11 +27,6 @@ const MessageItem = ({ message, onFeedback }: MessageItemProps) => {
         {message.type === "alert" && (
           <Badge variant="destructive" className="mb-2">
             System Alert
-          </Badge>
-        )}
-        {message.priority && (
-          <Badge className={`mb-2 ${getPriorityColor(message.priority)}`}>
-            {message.priority.toUpperCase()} PRIORITY
           </Badge>
         )}
         <div className="mb-2">{message.content}</div>
