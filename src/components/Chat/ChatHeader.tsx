@@ -6,7 +6,7 @@ const ChatHeader = () => (
     <Alert>
       <AlertTriangle className="h-4 w-4" />
       <AlertDescription>
-        Active Emergency Response Session - All communications are encrypted and logged
+        Solana Development Assistant - AI-powered guidance for blockchain development and analysis
       </AlertDescription>
     </Alert>
   </div>

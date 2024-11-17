@@ -12,9 +12,17 @@ const ChatInterface = () => {
   const [messages, setMessages] = useState<Message[]>([
     {
       role: "system",
-      content: "EROS Emergency Response System initialized. Ready to assist with incident management.",
+      content: "Solana Development Assistant initialized. Ready to help with blockchain development, analysis, and insights.",
       timestamp: new Date(),
-      type: "alert"
+      type: "alert",
+      metadata: {
+        suggestedActions: [
+          "Analyze wallet activities",
+          "Explore Solana network extensions",
+          "Build Solana programs",
+          "Learn about NFT projects"
+        ]
+      }
     }
   ]);
   const [input, setInput] = useState("");
@@ -70,7 +78,12 @@ const ChatInterface = () => {
           type: "recommendation",
           priority: "medium",
           metadata: {
-            suggestedActions: ["Dispatch emergency response", "Alert nearby units", "Request backup"]
+            suggestedActions: [
+              "View on-chain data",
+              "Check wallet activity",
+              "Deploy program",
+              "Analyze NFT market"
+            ]
           }
         };
         
@@ -82,11 +95,10 @@ const ChatInterface = () => {
 
         toast({
           title: "Response received",
-          description: "New message from EROS system",
+          description: "New insights from Solana Assistant",
         });
       }
     } catch (error) {
-      // Error handling is now done in the sendMessage function
       console.error("Failed to process message:", error);
     } finally {
       setIsLoading(false);

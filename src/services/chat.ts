@@ -13,6 +13,18 @@ interface GroqResponse {
 
 export const sendMessage = async (messages: Message[]): Promise<GroqResponse> => {
   try {
+    const systemPrompt = {
+      role: "system",
+      content: `You are an AI assistant specialized in Solana blockchain development and analysis. You can help with:
+      - Analyzing on-chain data and wallet activities
+      - Understanding Solana network extensions like Sonic and MagicBlock
+      - Providing guidance on Solana program development
+      - Explaining token economics and NFT projects
+      - Offering code examples and development best practices
+      
+      Always provide specific, actionable advice and include code examples when relevant.`
+    };
+
     const response = await fetch("https://api.groq.com/openai/v1/chat/completions", {
       method: "POST",
       headers: {
@@ -21,7 +33,7 @@ export const sendMessage = async (messages: Message[]): Promise<GroqResponse> =>
       },
       body: JSON.stringify({
         model: "mixtral-8x7b-32768",
-        messages: messages.map(({ role, content }) => ({ role, content })),
+        messages: [systemPrompt, ...messages.map(({ role, content }) => ({ role, content }))],
         temperature: 0.7,
       }),
     });
@@ -41,4 +53,4 @@ export const sendMessage = async (messages: Message[]): Promise<GroqResponse> =>
     });
     throw error;
   }
-}
+};
